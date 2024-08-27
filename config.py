@@ -7,9 +7,31 @@ num_classes = 1     # For one object car
 # E is my external drive
 train_csv_file=r"E:\cars_only_set\kaggle\archive\data\train_solution_bounding_boxes.csv"
 train_images_dir=r"E:\cars_only_set\kaggle\archive\data\training_images"
+
 pascal_voc_root_dir=r"E:\PASCAL_VOC"
 
+DATASET=r"E:\PASCAL_VOC"
+IMG_DIR=r"E:\PASCAL_VOC\images"
+LABEL_DIR=r"E:\PASCAL_VOC\labels"
 pascal_voc_num_classes=20
+DEVICE='cuda:0'
+NUM_WORKERS = 1   # on Linux OS 4
+BATCH_SIZE = 4      # My PC cant ran it8
+IMAGE_SIZE = 416
+NUM_CLASSES = 20
+LEARNING_RATE = 1e-5
+WEIGHT_DECAY = 1e-4
+NUM_EPOCHS = 100
+CONF_THRESHOLD = 0.05
+MAP_IOU_THRESH = 0.5
+NMS_IOU_THRESH = 0.45
+S = [IMAGE_SIZE // 32, IMAGE_SIZE // 16, IMAGE_SIZE // 8]
+PIN_MEMORY = True
+LOAD_MODEL = False
+SAVE_MODEL = True
+CHECKPOINT_FILE = r"E:\PASCAL_VOC\checkpoints"
+CHECKPOINT_DIR = r"E:\PASCAL_VOC\checkpoints"
+
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 import cv2

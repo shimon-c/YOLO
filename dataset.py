@@ -8,6 +8,8 @@ import config
 import pandas as pd
 import os
 import numpy as np
+#https://youtu.be/Grir6TZbc1M?si=J8yMmYZcnGFc1Fci
+
 from utils import (
     cells_to_bboxes,
     iou_width_height as iou,

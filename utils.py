@@ -421,7 +421,8 @@ def get_mean_std(loader):
     return mean, std
 
 
-def save_checkpoint(model, optimizer, filename="my_checkpoint.pth.tar"):
+def save_checkpoint(model, optimizer, epoch=0, dir=''):
+    filename = os.path.join(dir, f'yolo_chkpnt_{epoch}.pt')
     print("=> Saving checkpoint")
     checkpoint = {
         "state_dict": model.state_dict(),
@@ -448,7 +449,7 @@ def get_loaders(train_csv_path, test_csv_path):
     IMAGE_SIZE = config.IMAGE_SIZE
     train_dataset = YOLODataset(
         train_csv_path,
-        transform=config.train_transforms,
+        transform=None,
         S=[IMAGE_SIZE // 32, IMAGE_SIZE // 16, IMAGE_SIZE // 8],
         img_dir=config.IMG_DIR,
         label_dir=config.LABEL_DIR,
