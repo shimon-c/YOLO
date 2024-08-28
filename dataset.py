@@ -22,6 +22,7 @@ IMAGE_SIZE = config.IMAGE_SIZE
 scales = config.scales
 # we scale image and then perform random crop
 box_format = 'pascal_voc'
+box_format='yolo'
 
 train_transforms = A.Compose(
     [
@@ -86,7 +87,7 @@ class YOLODataset(Dataset):
         self.img_dir = img_dir
         self.label_dir = label_dir
         self.image_size = image_size
-        self.transform = transform
+        self.transform = transform if transform is not None else train_transforms
         self.S = S
         self.anchors = torch.tensor(anchors[0] + anchors[1] + anchors[2])  # for all 3 scales
         self.num_anchors = self.anchors.shape[0]

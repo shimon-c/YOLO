@@ -111,7 +111,7 @@ def main(debug_flag=True):
             print(f"MAP: {mapval.item()}")
             if debug_flag:
                 plot_couple_examples(model, test_loader, 0.6, 0.5, scaled_anchors)
-            save_checkpoint(model, optimizer, config.CHECKPOINT_DIR)
+            save_checkpoint(model, optimizer, epoch=epoch,dir=config.CHECKPOINT_DIR)
             model.train()
 
 
