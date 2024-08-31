@@ -116,4 +116,5 @@ def main(debug_flag=True):
 
 
 if __name__ == "__main__":
-    main()
+    debug_flag = False
+    main(debug_flag=debug_flag)

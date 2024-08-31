@@ -422,8 +422,8 @@ def get_mean_std(loader):
 
 
 def save_checkpoint(model, optimizer, epoch=0, dir=''):
-    filename = os.path.join(dir, f'yolo_chkpnt_{epoch}.pt')
-    print("=> Saving checkpoint")
+    filename = os.path.join(dir, f'yolo_chkpnt_epoch_{epoch}.pt')
+    print(f"=> Saving checkpoint:{filename}")
     checkpoint = {
         "state_dict": model.state_dict(),
         "optimizer": optimizer.state_dict(),

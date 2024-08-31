@@ -16,7 +16,7 @@ LABEL_DIR=r"E:\PASCAL_VOC\labels"
 pascal_voc_num_classes=20
 DEVICE='cuda:0'
 NUM_WORKERS = 1   # on Linux OS 4
-BATCH_SIZE = 2      # My PC cant ran it 8
+BATCH_SIZE = 4      # My PC cant ran it 8
 IMAGE_SIZE = 416   # 416 orignaly but to check is we can work with smaller images (384)
 NUM_CLASSES = 20
 LEARNING_RATE = 1e-5
@@ -31,7 +31,7 @@ LOAD_MODEL = False
 SAVE_MODEL = True
 CHECKPOINT_FILE = r"E:\PASCAL_VOC\checkpoints"
 CHECKPOINT_DIR = r"E:\PASCAL_VOC\checkpoints"
-
+MODEL_PATH = r"E:\PASCAL_VOC\model\yolo_chkpnt_epoch_99.pt"
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 import cv2
