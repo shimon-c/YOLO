@@ -14,6 +14,7 @@ class KMeansEM:
     def __init__(self, num_clusters=9):
         self.num_clusters = num_clusters
         self.pnts_assign = []
+        self.clusters = None
 
     # Implementing E step
     def assign_clusters(self, X, clusters):
@@ -64,6 +65,15 @@ class KMeansEM:
             if nun_changes <= 0:
                 break
             self.update_clusters(data_np, clusters)
+        self.clusters = clusters
+
+    def get_clusters(self):
+        NK = self.clusters.shape[0]
+        dim = self.clusters[0]['center'].shape[0]
+        clts = np.zeros((NK,dim))
+        for k in range(NK):
+            clts[k,:] = self.clusters[k]['center']
+        return clts
 
 
 class KMeanAlg:
@@ -97,6 +107,9 @@ class KMeanAlg:
         #kmeans = KMeans(n_clusters=K)
         kmeans = KMeansEM(num_clusters=9)
         kmeans.fit(data)
+        clts = kmeans.get_clusters()
+        print(f'KmeanEM clusters:\n{clts}')
+        kmeans = KMeans(n_clusters=K)
         boxes = kmeans.cluster_centers_
         boxes = boxes[boxes[:, 1].argsort()]
         print(boxes)
@@ -115,3 +128,5 @@ if __name__ == '__main__':
     args = parse_args()
     km = KMeanAlg(csv_file=args.annotation_file, label_dir=args.labels_dir)
     boxes = km.get_kmean(K=args.k_ratios)
+
+# cmd: pyhton --annotation_file="D:\PASCAL_VOC\train.csv" --labels_dir=D:\PASCAL_VOC\labels
