@@ -60,7 +60,7 @@ class KMeansEM:
             clusters[k]['points'] = []
             clusters[k]['center'] = clusters_init[k]
 
-        for iter in tqdm(range(N),  desc="Kmeans fit"):
+        for iter in tqdm(range(num_iters),  desc="Kmeans fit"):
             clusters, nun_changes = self.assign_clusters(data_np, clusters)
             if nun_changes <= 0:
                 break
@@ -73,6 +73,7 @@ class KMeansEM:
         clts = np.zeros((NK,dim))
         for k in range(NK):
             clts[k,:] = self.clusters[k]['center']
+        clts = clts[clts[:, 1].argsort()]
         return clts
 
 
@@ -80,6 +81,7 @@ class KMeanAlg:
     def __init__(self, csv_file:str='', label_dir=''):
         self.annotations = pd.read_csv(csv_file)
         self.label_dir = label_dir
+        self.boxes = None
 
     def __len__(self):
         return len(self.annotations)
@@ -102,17 +104,20 @@ class KMeanAlg:
             data.extend(boxes)
         return data
 
-    def get_kmean(self, K=9):
+    def get_kmean(self, K=9, run_keamns_em=True):
         data = self.get_dataset()
-        #kmeans = KMeans(n_clusters=K)
-        kmeans = KMeansEM(num_clusters=9)
-        kmeans.fit(data)
-        clts = kmeans.get_clusters()
-        print(f'KmeanEM clusters:\n{clts}')
+        if run_keamns_em:
+            kmeans = KMeans(n_clusters=K)
+            kmeans = KMeansEM(num_clusters=9)
+            kmeans.fit(data)
+            clts = kmeans.get_clusters()
+            print(f'KmeanEM clusters:\n{clts}')
         kmeans = KMeans(n_clusters=K)
+        kmeans.fit(data)
         boxes = kmeans.cluster_centers_
         boxes = boxes[boxes[:, 1].argsort()]
         print(boxes)
+        self.boxes = boxes
         return boxes
 
 import argparse
