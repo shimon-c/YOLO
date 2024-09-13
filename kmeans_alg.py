@@ -10,6 +10,13 @@ import random
 def distance(p1,p2):
     return np.sqrt(np.sum((p1-p2)**2))
 
+def mat_dist(p1,m2):
+    diff = p1-m2
+    diff = diff * diff
+    dist = np.sum(diff,axis=1)
+    dist = np.sqrt(dist)
+    return dist
+
 class KMeansEM:
     def __init__(self, num_clusters=9):
         self.num_clusters = num_clusters
@@ -19,15 +26,21 @@ class KMeansEM:
     # Implementing E step
     def assign_clusters(self, X, clusters):
         num_changes = 0
+        KK = clusters.shape[0]
+        centers = np.zeros((KK, clusters[0]['center'].shape[0]))
+        for i in range(KK):
+            centers[i,...] = clusters[i]['center']
         for idx in range(X.shape[0]):
             dist = []
 
             curr_x = X[idx]
             KK = clusters.shape[0]
-            for i in range(KK):
-                dis = distance(curr_x, clusters[i]['center'])
-                dist.append(dis)
+            # for i in range(KK):
+            #     dis = distance(curr_x, clusters[i]['center'])
+            #     dist.append(dis)
+            dist = mat_dist(curr_x, centers)
             curr_cluster = np.argmin(dist)
+            #c1 = np.argmin(dist1)
             if self.pnts_assign[idx] != curr_cluster:
                 num_changes += 1
             self.pnts_assign[idx] = curr_cluster
@@ -43,7 +56,7 @@ class KMeansEM:
             if points.shape[0] > 0:
                 new_center = points.mean(axis=0)
                 clusters[i]['center'] = new_center
-
+                clusters[i]['size'] = len(points)
                 clusters[i]['points'] = []
         return clusters
 
@@ -59,13 +72,23 @@ class KMeansEM:
         for k in range(self.num_clusters):
             clusters[k]['points'] = []
             clusters[k]['center'] = clusters_init[k]
-
-        for iter in tqdm(range(num_iters),  desc="Kmeans fit"):
-            clusters, nun_changes = self.assign_clusters(data_np, clusters)
-            if nun_changes <= 0:
+        num_changes = -1
+        for iter in tqdm(range(num_iters),  desc="Kmeans fit:"):
+            clusters, num_changes = self.assign_clusters(data_np, clusters)
+            print(f"iter:{iter},num_changes:{num_changes}")
+            if num_changes <= 0:
                 break
             self.update_clusters(data_np, clusters)
         self.clusters = clusters
+
+    def select(self, K=9):
+        NK = self.clusters.shape[0]
+        clsz = np.zeros((self.clusters.shape[0],))
+        for k in range(NK):
+            clsz[k] = self.clusters[k]['size']
+        ids = np.argsort(clsz, )
+        ids = ids[::-1]
+        self.clusters = self.clusters[ids[:K]]
 
     def get_clusters(self):
         NK = self.clusters.shape[0]
@@ -108,15 +131,16 @@ class KMeanAlg:
         data = self.get_dataset()
         if run_keamns_em:
             kmeans = KMeans(n_clusters=K)
-            kmeans = KMeansEM(num_clusters=9)
+            kmeans = KMeansEM(num_clusters=30)
             kmeans.fit(data)
+            kmeans.select(K=K)
             clts = kmeans.get_clusters()
             print(f'KmeanEM clusters:\n{clts}')
         kmeans = KMeans(n_clusters=K)
         kmeans.fit(data)
         boxes = kmeans.cluster_centers_
         boxes = boxes[boxes[:, 1].argsort()]
-        print(boxes)
+        print(f"SKlearn boxes:\n{boxes}")
         self.boxes = boxes
         return boxes
 
