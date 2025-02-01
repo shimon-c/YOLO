@@ -6,6 +6,7 @@ https://www.youtube.com/watch?v=Grir6TZbc1M
 import config
 import torch
 import torch.optim as optim
+import yaml
 
 from yolo import YOLO
 from tqdm import tqdm
@@ -24,6 +25,12 @@ import warnings
 warnings.filterwarnings("ignore")
 
 torch.backends.cudnn.benchmark = True
+
+def read_yaml(yaml_file:str=''):
+    file = open(yaml_file, "r")
+    dct = yaml.safe_load(file)
+    for k,v in dct.items():
+        setattr(config,k,v)
 
 
 def train_fn(train_loader, model, optimizer, loss_fn, scaler, scaled_anchors):
@@ -114,7 +121,14 @@ def main(debug_flag=True):
             save_checkpoint(model, optimizer, epoch=epoch,dir=config.CHECKPOINT_DIR)
             model.train()
 
-
+import argparse
 if __name__ == "__main__":
+
+    ap = argparse.ArgumentParser("YOLO")
+    ap.add_argument('--yaml_file', type=str, default='', help="yaml to override config params")
+    args = ap.parse_args()
+    if args.yaml_file !='':
+        read_yaml(yaml_file=args.yaml_file)
+
     debug_flag = False
     main(debug_flag=debug_flag)
