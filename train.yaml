@@ -1,2 +1,4 @@
 train_csv_file: ""
 DATASET: "D:/PASCAL_VOC"
+IMG_DIR: "D:/PASCAL_VOC/images"
+LABEL_DIR: "D:/PASCAL_VOC/labels"
