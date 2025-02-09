@@ -17,6 +17,7 @@ class YoloLoss(nn.Module):
         self.bce = nn.BCEWithLogitsLoss()
         self.entropy = nn.CrossEntropyLoss() if not car_only_flag else nn.BCEWithLogitsLoss()
         self.sigmoid = nn.Sigmoid()
+        self.one_class_flag = car_only_flag
 
         # Constants signifying how much to pay for each respective part of the loss
         self.lambda_class = 1
@@ -65,9 +66,14 @@ class YoloLoss(nn.Module):
         # ================== #
         class_loss = 0
         if has_obj:
-            class_loss = self.entropy(
-                (predictions[..., 5:][obj]), (target[..., 5][obj].long()),
-            )
+            if not self.one_class_flag:
+                class_loss = self.entropy(
+                    (predictions[..., 5:][obj]), (target[..., 5][obj].long()),
+                )
+            else:
+                tr = target[..., 5][obj]
+                tr = tr.unsqueeze(dim=1)
+                class_loss = self.entropy(predictions[..., 5:][obj], tr)
 
         #print("__________________________________")
         #print(self.lambda_box * box_loss)

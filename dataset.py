@@ -80,7 +80,7 @@ class YOLODataset(Dataset):
         anchors=config.ANCHORS,
         image_size=IMAGE_SIZE,
         S=scales,
-        C=config.num_classes,
+        C=config.NUM_CLASSES,
         transform=None,
     ):
         if not config.car_only_flag:
@@ -107,7 +107,9 @@ class YOLODataset(Dataset):
         for k in range(self.car_only_df.shape[0]):
             img_name,x1,y1,x2,y2 = self.car_only_df.iloc[k,:]
             lst = self.annot_dct.get(img_name, [])
+            tp = (x1,y1,x2,y2)
             lst.append((x1,y1,x2,y2))
+            self.annot_dct[img_name] = lst
         lst = []
         for ks, vs in self.annot_dct.items():
             lst.append((ks, vs))
@@ -132,7 +134,7 @@ class YOLODataset(Dataset):
             img_path = os.path.join(self.img_dir,img)
             image = np.array(Image.open(img_path).convert("RGB"))
             bboxes = []
-            C,H,W = image.shape
+            H,W,C = image.shape
             for box in lst:
                 x1,y1,x2,y2 = box
                 xc =(x1+x2)/(2*W)
