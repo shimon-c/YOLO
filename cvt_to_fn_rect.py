@@ -24,6 +24,6 @@ if __name__ == '__main__':
     odf['ymax'] = df['bbox_y'] + df['bbox_height']
     dirn = os.path.dirname(args.input_csv)
     out_name = os.path.join(dirn, args.output_file_name)
-    df.to_csv(out_name)
+    odf.to_csv(out_name, index=False)
     print(f'out file:{out_name}')
 

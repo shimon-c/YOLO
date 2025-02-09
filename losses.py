@@ -11,11 +11,11 @@ from utils import intersection_over_union
 
 
 class YoloLoss(nn.Module):
-    def __init__(self):
+    def __init__(self,car_only_flag=False):
         super().__init__()
         self.mse = nn.MSELoss()
         self.bce = nn.BCEWithLogitsLoss()
-        self.entropy = nn.CrossEntropyLoss()
+        self.entropy = nn.CrossEntropyLoss() if not car_only_flag else nn.BCEWithLogitsLoss()
         self.sigmoid = nn.Sigmoid()
 
         # Constants signifying how much to pay for each respective part of the loss

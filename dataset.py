@@ -83,7 +83,13 @@ class YOLODataset(Dataset):
         C=config.num_classes,
         transform=None,
     ):
-        self.annotations = pd.read_csv(csv_file)
+        if not config.car_only_flag:
+            self.annotations = pd.read_csv(csv_file)
+            self.len = 0
+            self.annot_dct = None
+        else:
+            self.annotations = None
+            self.read_one_car_annot(csv_file=csv_file)
         self.img_dir = img_dir
         self.label_dir = label_dir
         self.image_size = image_size
@@ -95,14 +101,34 @@ class YOLODataset(Dataset):
         self.C = C
         self.ignore_iou_thresh = 0.5
 
+    def read_one_car_annot(self, csv_file):
+        self.car_only_df = pd.read_csv(csv_file)
+        self.annot_dct = dict()
+        for k in range(self.car_only_df.shape[0]):
+            img_name,x1,y1,x2,y2 = self.car_only_df.iloc[k,:]
+            lst = self.annot_dct.get(img_name, [])
+            lst.append((x1,y1,x2,y2))
+        lst = []
+        for ks, vs in self.annot_dct.items():
+            lst.append((ks, vs))
+        self.annot_dct = lst
+
     def __len__(self):
-        return len(self.annotations)
+        if self.annotations is not None:
+            return len(self.annotations)
+        else:
+            return len(self.annot_dct)
 
     def __getitem__(self, index):
-        index = index % len(self.annotations)
-        label_path = os.path.join(self.label_dir, self.annotations.iloc[index, 1])
-        bboxes = np.roll(np.loadtxt(fname=label_path, delimiter=" ", ndmin=2), 4, axis=1).tolist()
-        img_path = os.path.join(self.img_dir, self.annotations.iloc[index, 0])
+        if self.annotations is not None:
+            index = index % len(self.annotations)
+            label_path = os.path.join(self.label_dir, self.annotations.iloc[index, 1])
+            bboxes = np.roll(np.loadtxt(fname=label_path, delimiter=" ", ndmin=2), 4, axis=1).tolist()
+            img_path = os.path.join(self.img_dir, self.annotations.iloc[index, 0])
+        else:
+            index = index % len(self.annot_dct)
+            img, x1,y1,x2,y1 = self.annot_dct[index]
+
         image = np.array(Image.open(img_path).convert("RGB"))
 
         if self.transform:

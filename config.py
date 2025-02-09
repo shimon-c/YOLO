@@ -3,19 +3,20 @@ IMAGE_SIZE = 416
 scales = [13, 26, 52]
 # we scale image and then perform random crop
 box_format = 'pascal_voc'
-num_classes = 1     # For one object car
-# E is my external drive
-train_csv_file=r"E:\cars_only_set\kaggle\archive\data\train_solution_bounding_boxes.csv"
-train_images_dir=r"E:\cars_only_set\kaggle\archive\data\training_images"
 
+# E is my external drive
+train_csv_file=r"D:\cars_only_set\kaggle\archive\data\train_solution_bounding_boxes.csv"
+train_images_dir=r"D:\cars_only_set\kaggle\archive\data\training_images"
+car_only_flag = True
 pascal_voc_root_dir=r"E:\PASCAL_VOC"
 
+# Pascal VOD defaults
 DATASET=r"E:\PASCAL_VOC"
 IMG_DIR=r"E:\PASCAL_VOC\images"
 LABEL_DIR=r"E:\PASCAL_VOC\labels"
 TRAIN_CSV="train.csv"
 TEST_CSV="test.csv"
-pascal_voc_num_classes=20
+# pascal_voc_num_classes=20
 DEVICE='cuda:0'
 NUM_WORKERS = 1   # on Linux OS 4
 BATCH_SIZE = 4      # My PC cant ran it 8

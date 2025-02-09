@@ -2,3 +2,8 @@ train_csv_file: ""
 DATASET: "D:/PASCAL_VOC"
 IMG_DIR: "D:/PASCAL_VOC/images"
 LABEL_DIR: "D:/PASCAL_VOC/labels"
+
+NUM_CLASSES: 1
+DATASET: "D:/cars_only_set/kaggle/archive/data"
+TRAIN_CSV: "train_solution_bounding_boxes.csv"
+TEST_CSV: "test_ground_truth.csv"
