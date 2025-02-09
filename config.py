@@ -13,6 +13,7 @@ pascal_voc_root_dir=r"E:\PASCAL_VOC"
 # Pascal VOD defaults
 DATASET=r"E:\PASCAL_VOC"
 IMG_DIR=r"E:\PASCAL_VOC\images"
+TEST_IMG_DIR=IMG_DIR
 LABEL_DIR=r"E:\PASCAL_VOC\labels"
 TRAIN_CSV="train.csv"
 TEST_CSV="test.csv"

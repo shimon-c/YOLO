@@ -26,6 +26,7 @@ warnings.filterwarnings("ignore")
 
 torch.backends.cudnn.benchmark = True
 
+# Set the config structure
 def read_yaml(yaml_file:str=''):
     file = open(yaml_file, "r")
     dct = yaml.safe_load(file)
@@ -69,7 +70,7 @@ def main(debug_flag=True):
     optimizer = optim.Adam(
         model.parameters(), lr=config.LEARNING_RATE, weight_decay=config.WEIGHT_DECAY
     )
-    loss_fn = YoloLoss()
+    loss_fn = YoloLoss(car_only_flag=config.NUM_CLASSES<=1)
     # Mixed percision we dont really need it
     scaler = torch.cuda.amp.GradScaler()
 

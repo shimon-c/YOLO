@@ -125,11 +125,22 @@ class YOLODataset(Dataset):
             label_path = os.path.join(self.label_dir, self.annotations.iloc[index, 1])
             bboxes = np.roll(np.loadtxt(fname=label_path, delimiter=" ", ndmin=2), 4, axis=1).tolist()
             img_path = os.path.join(self.img_dir, self.annotations.iloc[index, 0])
+            image = np.array(Image.open(img_path).convert("RGB"))
         else:
             index = index % len(self.annot_dct)
-            img, x1,y1,x2,y1 = self.annot_dct[index]
+            img, lst = self.annot_dct[index]
+            img_path = os.path.join(self.img_dir,img)
+            image = np.array(Image.open(img_path).convert("RGB"))
+            bboxes = []
+            C,H,W = image.shape
+            for box in lst:
+                x1,y1,x2,y2 = box
+                xc =(x1+x2)/(2*W)
+                yc = (y1+y2)/(2*H)
+                wid = (x2-x1)/W
+                hig = (y2-y1)/H
+                bboxes.append((xc,yc,wid,hig,1))
 
-        image = np.array(Image.open(img_path).convert("RGB"))
 
         if self.transform:
             augmentations = self.transform(image=image, bboxes=bboxes)
