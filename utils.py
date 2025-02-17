@@ -228,8 +228,10 @@ def mean_average_precision(
         recalls = torch.cat((torch.tensor([0]), recalls))
         # torch.trapz for numerical integration
         average_precisions.append(torch.trapz(precisions, recalls))
-
-    return sum(average_precisions) / len(average_precisions)
+    map = 0
+    if len(average_precisions)>0:
+        map = sum(average_precisions) / len(average_precisions)
+    return map
 
 
 def plot_image(image, boxes):
