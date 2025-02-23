@@ -100,7 +100,8 @@ def non_max_suppression(bboxes, iou_threshold, threshold, box_format="corners"):
     bboxes = [box for box in bboxes if box[1] > threshold]
     bboxes = sorted(bboxes, key=lambda x: x[1], reverse=True)
     bboxes_after_nms = []
-
+    max_boxes = 10*config.BATCH_SIZE
+    bboxes = bboxes[0:max_boxes]
     while bboxes:
         chosen_box = bboxes.pop(0)
 
@@ -228,9 +229,9 @@ def mean_average_precision(
         recalls = torch.cat((torch.tensor([0]), recalls))
         # torch.trapz for numerical integration
         average_precisions.append(torch.trapz(precisions, recalls))
-    map = 0
+    map = torch.tensor([0])
     if len(average_precisions)>0:
-        map = sum(average_precisions) / len(average_precisions)
+        map = sum(average_precisions) / (len(average_precisions)+1e-12)
     return map
 
 
@@ -425,12 +426,14 @@ def get_mean_std(loader):
 
 def save_checkpoint(model, optimizer, epoch=0, dir=''):
     filename = os.path.join(dir, f'yolo_chkpnt_epoch_{epoch}.pt')
+    os.makedirs(dir, exist_ok=True)
     print(f"=> Saving checkpoint:{filename}")
     checkpoint = {
         "state_dict": model.state_dict(),
         "optimizer": optimizer.state_dict(),
     }
     torch.save(checkpoint, filename)
+    print(f'save:{filename}')
 
 
 def load_checkpoint(checkpoint_file, model, optimizer, lr):

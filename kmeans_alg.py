@@ -6,7 +6,9 @@ import numpy as np
 from PIL import Image, ImageFile
 from tqdm import tqdm
 import random
+import cv2
 
+# Cars only:   "D:\cars_only_set\kaggle\archive\data\train_solution_bounding_boxes.csv"
 def distance(p1,p2):
     return np.sqrt(np.sum((p1-p2)**2))
 
@@ -94,22 +96,42 @@ class KMeansEM:
         NK = self.clusters.shape[0]
         dim = self.clusters[0]['center'].shape[0]
         clts = np.zeros((NK,dim))
+        cls_size = np.zeros((NK,))
         for k in range(NK):
             clts[k,:] = self.clusters[k]['center']
-        clts = clts[clts[:, 1].argsort()]
+            cls_size[k] = clts[k,0]*clts[k,1]
+        #clts = clts[clts[:, 1].argsort()]
+        ids = np.argsort(cls_size)
+        clts = clts[ids]
         return clts
 
 
 class KMeanAlg:
-    def __init__(self, csv_file:str='', label_dir=''):
+    def __init__(self, csv_file:str='', img_dir=None,label_dir=''):
+        assert img_dir is not None
         self.annotations = pd.read_csv(csv_file)
         self.label_dir = label_dir
+        self.img_dir = img_dir
         self.boxes = None
 
     def __len__(self):
         return len(self.annotations)
 
+    def get_car_only_item(self, index):
+        index = index % len(self.annotations)
+        file_name, x1,y1,x2,y2 = self.annotations.iloc[index,:]
+        img_name = os.path.join(self.img_dir, file_name)
+        img = cv2.imread(img_name)
+        H,W,C = img.shape
+        wid,high = x2-x1,y2-y1
+        wid/=W
+        high/=H
+        wh_boxes = [(wid,high)]
+        return wh_boxes
+
     def __getitem__(self, index):
+        if self.label_dir=='':
+            return self.get_car_only_item(index=index)
         index = index % len(self.annotations)
         label_path = os.path.join(self.label_dir, self.annotations.iloc[index, 1])
         bboxes = np.roll(np.loadtxt(fname=label_path, delimiter=" ", ndmin=2), 4, axis=1).tolist()
@@ -149,13 +171,14 @@ def parse_args():
     ap = argparse.ArgumentParser("Kmeans for aspect ratios")
     ap.add_argument('--annotation_file', type=str,required=True, help="Full path of annotation file")
     ap.add_argument('--labels_dir', type=str, required=True, help="Full path of labels dir")
+    ap.add_argument('--img_dir', type=str, required=True, help="Full path of labels dir")
     ap.add_argument('--k_ratios', type=int, default=9, help="Number of aspect ratios")
     args = ap.parse_args()
     return args
 
 if __name__ == '__main__':
     args = parse_args()
-    km = KMeanAlg(csv_file=args.annotation_file, label_dir=args.labels_dir)
+    km = KMeanAlg(csv_file=args.annotation_file, label_dir=args.labels_dir, img_dir=args.img_dir)
     boxes = km.get_kmean(K=args.k_ratios)
 
 # cmd: pyhton --annotation_file="D:\PASCAL_VOC\train.csv" --labels_dir=D:\PASCAL_VOC\labels

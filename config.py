@@ -4,17 +4,13 @@ scales = [13, 26, 52]
 # we scale image and then perform random crop
 box_format = 'pascal_voc'
 
-# E is my external drive
-train_csv_file=r"D:\cars_only_set\kaggle\archive\data\train_solution_bounding_boxes.csv"
-train_images_dir=r"D:\cars_only_set\kaggle\archive\data\training_images"
-car_only_flag = True
-pascal_voc_root_dir=r"E:\PASCAL_VOC"
 
 # Pascal VOD defaults
-DATASET=r"E:\PASCAL_VOC"
-IMG_DIR=r"E:\PASCAL_VOC\images"
+DATASET=r"D:\PASCAL_VOC"
+IMG_DIR=r"D:\PASCAL_VOC\images"
 TEST_IMG_DIR=IMG_DIR
-LABEL_DIR=r"E:\PASCAL_VOC\labels"
+LABEL_DIR=r"D:\PASCAL_VOC\labels"
+pascal_voc_root_dir=r"D:\PASCAL_VOC"
 TRAIN_CSV="train.csv"
 TEST_CSV="test.csv"
 # pascal_voc_num_classes=20
@@ -26,7 +22,7 @@ NUM_CLASSES = 20
 LEARNING_RATE = 1e-5
 WEIGHT_DECAY = 1e-4
 NUM_EPOCHS = 100
-CONF_THRESHOLD = 0.4
+CONF_THRESHOLD = 0.05
 MAP_IOU_THRESH = 0.5
 NMS_IOU_THRESH = 0.45
 S = [IMAGE_SIZE // 32, IMAGE_SIZE // 16, IMAGE_SIZE // 8]
@@ -46,11 +42,8 @@ ANCHORS = [
     [(0.07, 0.15), (0.15, 0.11), (0.14, 0.29)],
     [(0.02, 0.03), (0.04, 0.07), (0.08, 0.06)],
 ]
-ANCHORS = [
-    [(0.28, 0.22), (0.38, 0.48), (0.9, 0.78)],
-    [(0.07, 0.15), (0.15, 0.11), (0.14, 0.29)],
-    [(0.02, 0.03), (0.04, 0.07), (0.08, 0.06)],
-]
+
+
 
 test_transforms = A.Compose(
     [
@@ -168,4 +161,41 @@ COCO_LABELS = ['person',
  'teddy bear',
  'hair drier',
  'toothbrush'
+]
+
+################### CARS Only ###############
+car_only_flag = True
+train_csv_file=r"D:\cars_only_set\kaggle\archive\data\train_solution_bounding_boxes.csv"
+train_images_dir=r"D:\cars_only_set\kaggle\archive\data\training_images"
+NUM_CLASSES = 1
+
+IMG_DIR=r"D:\cars_only_set\kaggle\archive\data\testing_images"
+# Cars Only
+ANCHORS = [
+    [(0.14525983, 0.1057717), (0.16571613, 0.11177221), (0.26534052, 0.17289049)],
+    [(0.13976003, 0.08924032), (0.12876111, 0.10276905), (0.15776513, 0.09668724)],
+    [(0.05287079, 0.07007413), (0.07328868, 0.09847376), (0.11574967, 0.09348868)],
+]
+
+PASCAL_CLASSES = [
+    "car",
+    "bicycle",
+    "bird",
+    "boat",
+    "bottle",
+    "bus",
+    "car",
+    "cat",
+    "chair",
+    "cow",
+    "diningtable",
+    "dog",
+    "horse",
+    "motorbike",
+    "person",
+    "pottedplant",
+    "sheep",
+    "sofa",
+    "train",
+    "tvmonitor"
 ]

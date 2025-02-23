@@ -1,8 +1,9 @@
 """
 Main file for training Yolo model on Pascal VOC and COCO dataset
 https://www.youtube.com/watch?v=Grir6TZbc1M
-"""
 
+"""
+#To run from cmd: C:\Users\shimon.cohen\PycharmProjects\slidems\slidems\slidems\venv\Scripts\activate.bat
 import config
 import torch
 import torch.optim as optim
