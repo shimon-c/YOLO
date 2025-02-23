@@ -84,7 +84,7 @@ def parse_args():
 #D:\PASCAL_VOC\last_checkpoint
 #D:\cars_only_set\kaggle\model
 # params for pascal: --checkpoint_path="D:\PASCAL_VOC\last_checkpoint\yolo_chkpnt_epoch_99_pascal_voc.pt" --test="D:\PASCAL_VOC\test.csv"
-
+# params for cars: --checkpoint_path="D:\PASCAL_VOC\last_checkpoint\yolo_chkpnt_epoch_99_pascal_voc.pt" --test="D:\PASCAL_VOC\test.csv" --checkpoint_path="D:\cars_only_set\kaggle\model\yolo_chkpnt_epoch_99_cars.pt" --test="D:\cars_only_set\kaggle\archive\data\test_ground_truth.csv"
 if __name__ == '__main__':
     args = parse_args()
     show_preds(checkpoint_path=args.checkpoint_path, test_csv=args.test_csv_path)
