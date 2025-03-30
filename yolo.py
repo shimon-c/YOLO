@@ -92,6 +92,8 @@ class ScalePrediction(nn.Module):
         )
         self.num_classes = num_classes
 
+    # Tensor dimenstion N,C,H,W
+    # The last permutation is for easier loss computation
     def forward(self, x):
         #print(f'Scale Prediction x.shape:{x.shape}')
         return (
@@ -124,7 +126,7 @@ class YOLO(nn.Module):
             elif isinstance(layer, nn.Upsample):
                 x = torch.cat([x, route_connections[-1]], dim=1)
                 route_connections.pop()
-
+        # output=(Batch,#anchors-(3), H,W, (num-class+bbox+obj))
         return outputs
 
     def _create_conv_layers(self):
