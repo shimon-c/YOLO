@@ -1,4 +1,34 @@
+"""
+https://www.makesense.ai/
+"""
+
 import pandas as pd
+import cv2
+import os
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+
+
+def show_image(img_name=None, rect_list=[]):
+    # define Matplotlib figure and axis
+    fig, ax = plt.subplots()
+    img = cv2.imread(img_name)
+    ax.imshow(img)
+    for rct in rect_list:
+        rect = Rectangle((rct.x1,rct.y1),
+                         rct.x2-rct.x1,
+                         rct.y2-rct.y1,
+                         linewidth=1,
+                         edgecolor='r',
+                         facecolor="none")
+        ax.add_patch(rect)
+    plt.show()
+
+def show_dct(dct, root_dir=None):
+    for img,rects in dct.items():
+        img = os.path.join(root_dir, img)
+        show_image(img_name=img, rect_list=rects)
+
 class Box:
     def __init__ (self,x1=None,y1=None,x2=None,y2=None, iou_val=0):
         self.x1 = x1
@@ -77,12 +107,17 @@ if __name__ == "__main__":
         ap = argparse.ArgumentParser("Check results")
         ap.add_argument('--pred_csv', type=str, required=True, help="Prediction CSV")
         ap.add_argument('--labs_csv', type=str, required=True, help="Labs CSV")
+        ap.add_argument('--img_root_dir', type=str, default="", required=False, help="images root dir")
         args = ap.parse_args()
         return args
 
     args = parse_args()
     pred_dct = create_dict(args.pred_csv)
     labs_dct = create_dict(args.labs_csv)
+    if args.img_root_dir!="":
+        show_dct(dct=pred_dct,root_dir=args.img_root_dir)
+        #show_dct(dct=labs_dct, root_dir=args.img_root_dir)
+        pass
     f_score = process_dcts(pred_dct=pred_dct, labs_dct=labs_dct)
     print(f'f_score:{f_score}')
 
