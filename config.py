@@ -164,18 +164,20 @@ COCO_LABELS = ['person',
 ]
 
 ################### CARS Only ###############
-car_only_flag = True
-train_csv_file=r"D:\cars_only_set\kaggle\archive\data\train_solution_bounding_boxes.csv"
-train_images_dir=r"D:\cars_only_set\kaggle\archive\data\training_images"
-NUM_CLASSES = 1
+car_only_flag = False
+train_csv_file,train_images_dir="",""
+if car_only_flag:
+    train_csv_file=r"D:\cars_only_set\kaggle\archive\data\train_solution_bounding_boxes.csv"
+    train_images_dir=r"D:\cars_only_set\kaggle\archive\data\training_images"
+    NUM_CLASSES = 1
 
-IMG_DIR=r"D:\cars_only_set\kaggle\archive\data\testing_images"
-# Cars Only
-ANCHORS = [
-    [(0.14525983, 0.1057717), (0.16571613, 0.11177221), (0.26534052, 0.17289049)],
-    [(0.13976003, 0.08924032), (0.12876111, 0.10276905), (0.15776513, 0.09668724)],
-    [(0.05287079, 0.07007413), (0.07328868, 0.09847376), (0.11574967, 0.09348868)],
-]
+    IMG_DIR=r"D:\cars_only_set\kaggle\archive\data\testing_images"
+    # Cars Only
+    ANCHORS = [
+        [(0.14525983, 0.1057717), (0.16571613, 0.11177221), (0.26534052, 0.17289049)],
+        [(0.13976003, 0.08924032), (0.12876111, 0.10276905), (0.15776513, 0.09668724)],
+        [(0.05287079, 0.07007413), (0.07328868, 0.09847376), (0.11574967, 0.09348868)],
+    ]
 
 PASCAL_CLASSES = [
     "car",

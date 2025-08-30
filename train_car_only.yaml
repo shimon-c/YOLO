@@ -1,13 +1,17 @@
 train_csv_file: ""
-#DATASET: "D:/PASCAL_VOC"
-#IMG_DIR: "D:/PASCAL_VOC/images"
-#LABEL_DIR: "D:/PASCAL_VOC/labels"
 
-NUM_CLASSES: 1
-DATASET: "D:/cars_only_set/kaggle/archive/data"
-TRAIN_CSV: "train_solution_bounding_boxes.csv"
-TEST_CSV: "test_ground_truth.csv"
-CHECKPOINT_DIR: "D:/cars_only_set/kaggle/checkpoints"
-CHECKPOINT_FILE: "D:/cars_only_set/kaggle/checkpoints"
-IMG_DIR: "D:/cars_only_set/kaggle/archive/data/training_images"
-TEST_IMG_DIR: "D:/cars_only_set/kaggle/archive/data/testing_images"
+
+#NUM_CLASSES: 1
+#DATASET: "D:/cars_only_set/kaggle/archive/data"
+#TRAIN_CSV: "train_solution_bounding_boxes.csv"
+#TEST_CSV: "test_ground_truth.csv"
+#CHECKPOINT_DIR: "D:/cars_only_set/kaggle/checkpoints"
+#CHECKPOINT_FILE: "D:/cars_only_set/kaggle/checkpoints"
+#IMG_DIR: "D:/cars_only_set/kaggle/archive/data/training_images"
+#TEST_IMG_DIR: "D:/cars_only_set/kaggle/archive/data/testing_images"
+
+#to switch to pascal
+DATASET: "D:/PASCAL_VOC"
+IMG_DIR: "D:/PASCAL_VOC/images"
+LABEL_DIR: "D:/PASCAL_VOC/labels"
+car_only_flag: False

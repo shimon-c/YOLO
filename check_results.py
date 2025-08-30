@@ -112,13 +112,18 @@ if __name__ == "__main__":
         return args
 
     args = parse_args()
+    pred_name = os.path.basename(args.pred_csv)
     pred_dct = create_dict(args.pred_csv)
     labs_dct = create_dict(args.labs_csv)
     if args.img_root_dir!="":
-        show_dct(dct=pred_dct,root_dir=args.img_root_dir)
+        #show_dct(dct=pred_dct,root_dir=args.img_root_dir)
         #show_dct(dct=labs_dct, root_dir=args.img_root_dir)
         pass
     f_score = process_dcts(pred_dct=pred_dct, labs_dct=labs_dct)
-    print(f'f_score:{f_score}')
+    print(f'student:{pred_name},f_score:{f_score}')
 
 
+###
+### --labs_csv="D:\cars_only_set\kaggle\archive\data\test_ground_truth_v1.csv"
+### --img_root_dir=D:\cars_only_set\kaggle\archive\data\testing_images
+### --pred_csv="C:\Users\shimon.cohen\Documents\Docs\HIT\students_works\new_works\danny_vaks_submission.csv"

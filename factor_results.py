@@ -26,7 +26,7 @@ def parse_args():
     args = ap.parse_args()
     return args
 
-def process(csv_path ,factor_score=65, max_limit_score=95):
+def process(csv_path ,factor_score=85, max_limit_score=100):
     df = pd.read_csv(csv_path)
     col_names = df.columns.to_list()
     min_score = df[col_names[1]].min()
@@ -51,6 +51,7 @@ def process(csv_path ,factor_score=65, max_limit_score=95):
             score = max_limit_score
         print(f'{df.iloc[k,0]}\t {score}')
     ny = lin_reg.predict(X)
+    print('\n--------------------\n')
     for k in range(N):
         name = df.iloc[k,0]
         print(f'{name}\t{ny[k]}')
